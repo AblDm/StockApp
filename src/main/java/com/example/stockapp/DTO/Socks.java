@@ -84,11 +84,15 @@ public class Socks {
 
     @Override
     public String toString() {
-        return "Socks{"+
-                ", color='" + color + '\'' +
-                ", cottonPart=" + cottonPart +
-                ", quantity=" + quantity +
-                '}';
+        if ("Total".equals(color)) {
+            return "Total = " + quantity;
+        } else {
+            return "Socks{" +
+                    "color='" + color + '\'' +
+                    ", cottonPart=" + cottonPart +
+                    ", quantity=" + quantity +
+                    '}';
+        }
     }
 
     @Override
