@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Socks")
@@ -67,5 +68,16 @@ public class Socks {
             this.id = id;
         }
 
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Socks socks = (Socks) o;
+        return cottonPart == socks.cottonPart && quantity == socks.quantity && Objects.equals(id, socks.id) && Objects.equals(color, socks.color);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, color, cottonPart, quantity);
+    }
+}
