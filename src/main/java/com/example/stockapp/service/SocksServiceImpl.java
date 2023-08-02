@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class SocksServiceImpl implements SocksService {
 
@@ -47,7 +49,7 @@ public class SocksServiceImpl implements SocksService {
 
     @Override
     @Transactional(readOnly = true)
-    public int getTotalSocks(String color, String operation, int cottonPart) {
+    public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         if ("moreThan".equals(operation)) {
             return socksRepository.countByColorAndCottonPartGreaterThan(color, cottonPart);
         } else if ("lessThan".equals(operation)) {

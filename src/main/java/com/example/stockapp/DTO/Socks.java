@@ -25,6 +25,16 @@ public class Socks {
     private int quantity;
 
 
+    public Socks(String color, int cottonPart, int quantity) {
+
+        this.color = color;
+        this.cottonPart = cottonPart;
+        this.quantity = quantity;
+    }
+
+    public Socks() {
+    }
+
     public String  getColor() {
         return color;
 
