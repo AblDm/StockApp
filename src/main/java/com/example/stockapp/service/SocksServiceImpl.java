@@ -105,7 +105,8 @@ public class SocksServiceImpl implements SocksService {
                 return existingSocks;
             }
         } else {
-            throw new InvalidRequestException("Invalid operation: " + operation);
+            List<Socks> partialMatches = socksRepository.findByColorAndCottonPart(color, cottonPart);
+            return partialMatches.isEmpty() ? partialMatches : null;
         }
     }
 }
