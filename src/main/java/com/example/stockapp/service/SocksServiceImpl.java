@@ -58,16 +58,18 @@ public class SocksServiceImpl implements SocksService {
             throw new InsufficientQuantityException("Insufficient socks quantity for outcome");
         }
 
-        for (Socks socks : socksList) {
-            int socksToDeduct = Math.min(socks.getQuantity(), quantity);
-            socks.setQuantity(socks.getQuantity() - socksToDeduct);
-            quantity -= socksToDeduct;
-            if (quantity == 0) {
+        List<Socks> socksToDeduct = new ArrayList<>(socksList);
+
+        for (Socks socks : socksToDeduct) {
+            int socksToDeductAmount = Math.min(socks.getQuantity(), quantity);
+            socks.setQuantity(socks.getQuantity() - socksToDeductAmount);
+            quantity -= socksToDeductAmount;
+            if (quantity <= 0) {
                 break;
             }
         }
 
-        socksRepository.saveAll(socksList);
+     socksRepository.saveAll(socksToDeduct);
     }
     public String formatSocksList(List<Socks> socksList) {
         StringBuilder responseBuilder = new StringBuilder();
