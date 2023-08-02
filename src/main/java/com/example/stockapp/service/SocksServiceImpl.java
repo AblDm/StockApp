@@ -1,7 +1,7 @@
 package com.example.stockapp.service;
 
 import com.example.stockapp.DTO.Socks;
-import com.example.stockapp.DTO.SocksRepository;
+import com.example.stockapp.repository.SocksRepository;
 
 import com.example.stockapp.exceptions.InsufficientQuantityException;
 import com.example.stockapp.exceptions.InvalidRequestException;

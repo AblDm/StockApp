@@ -1,5 +1,6 @@
-package com.example.stockapp.DTO;
+package com.example.stockapp.repository;
 
+import com.example.stockapp.DTO.Socks;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
