@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: dmabl
+      changes:
+        - createTable:
+            tableName: Socks
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: color
+                  type: VARCHAR(255)
+              - column:
+                  name: cottonPart
+                  type: INTEGER
+              - column:
+                  name: quantity
+                  type: INTEGER
