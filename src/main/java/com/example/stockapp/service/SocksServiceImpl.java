@@ -72,16 +72,21 @@ public class SocksServiceImpl implements SocksService {
 
     public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         List<Socks> socksList;
+        Integer totalQuantity = 0;
 
         if ("moreThan".equals(operation)) {
-            socksList = socksRepository.findByColorAndCottonPart(color, cottonPart + 1);
+            socksList = socksRepository.findByColorAndCottonPartGreaterThan(color, cottonPart);
+            totalQuantity = socksRepository.sumQuantityByColorAndCottonPartGreaterThan(color, cottonPart);
         } else if ("lessThan".equals(operation)) {
-            socksList = socksRepository.findByColorAndCottonPart(color, cottonPart - 1);
+            socksList = socksRepository.findByColorAndCottonPartLessThan(color, cottonPart);
+            totalQuantity = socksRepository.sumQuantityByColorAndCottonPartLessThan(color, cottonPart);
         } else if ("equal".equals(operation)) {
             socksList = socksRepository.findByColorAndCottonPart(color, cottonPart);
+            totalQuantity = socksRepository.sumQuantityByColorAndCottonPart(color, cottonPart);
         } else {
             throw new InvalidRequestException("Invalid operation: " + operation);
         }
+
         Map<String, Socks> socksMap = new HashMap<>();
         for (Socks socks : socksList) {
             String key = socks.getColor() + "-" + socks.getCottonPart();
@@ -93,6 +98,8 @@ public class SocksServiceImpl implements SocksService {
             }
         }
 
-        return new ArrayList<>(socksMap.values());
+        List<Socks> totalSocksList = new ArrayList<>(socksMap.values());
+        totalSocksList.add(new Socks("Total", 0, totalQuantity));
+        return totalSocksList;
     }
 }
