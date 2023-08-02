@@ -77,6 +77,16 @@ public class Socks {
     }
 
     @Override
+    public String toString() {
+        return "Socks{" +
+                "id=" + id +
+                ", color='" + color + '\'' +
+                ", cottonPart=" + cottonPart +
+                ", quantity=" + quantity +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(id, color, cottonPart, quantity);
     }
