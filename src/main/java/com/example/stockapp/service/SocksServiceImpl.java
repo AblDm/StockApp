@@ -69,7 +69,13 @@ public class SocksServiceImpl implements SocksService {
 
         socksRepository.saveAll(socksList);
     }
-
+    public String formatSocksList(List<Socks> socksList) {
+        StringBuilder responseBuilder = new StringBuilder();
+        for (Socks socks : socksList) {
+            responseBuilder.append(socks.toString()).append("\n");
+        }
+        return responseBuilder.toString();
+    }
     public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         List<Socks> socksList;
         Integer totalQuantity = 0;
@@ -102,4 +108,7 @@ public class SocksServiceImpl implements SocksService {
         totalSocksList.add(new Socks("Total", 0, totalQuantity));
         return totalSocksList;
     }
+
+
+
 }

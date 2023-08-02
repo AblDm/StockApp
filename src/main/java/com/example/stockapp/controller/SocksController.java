@@ -81,17 +81,15 @@ public class SocksController {
                 return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
             }
             List<Socks> totalSocks = socksService.getTotalSocks(color, operation, cottonPart);
-            StringBuilder responseBuilder = new StringBuilder();
-            for (Socks socks : totalSocks) {
-                responseBuilder.append(socks.toString()).append("\n");
-            }
-            return ResponseEntity.ok(responseBuilder.toString());
+            String formattedResponse = socksService.formatSocksList(totalSocks);
+            return ResponseEntity.ok(formattedResponse);
         } catch (InvalidRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
+
 
 
 
