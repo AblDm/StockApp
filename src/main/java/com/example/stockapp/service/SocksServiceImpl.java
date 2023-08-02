@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,14 +61,23 @@ public class SocksServiceImpl implements SocksService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         if ("moreThan".equals(operation)) {
             return socksRepository.findByColorAndCottonPartGreaterThan(color, cottonPart);
         } else if ("lessThan".equals(operation)) {
             return socksRepository.findByColorAndCottonPartLessThan(color, cottonPart);
         } else if ("equal".equals(operation)) {
-            return socksRepository.findByColorAndCottonPart(color, cottonPart);
+            List<Socks> existingSocks = socksRepository.findByColorAndCottonPart(color, cottonPart);
+
+            if (!existingSocks.isEmpty()) {
+                int totalQuantity = existingSocks.stream().mapToInt(Socks::getQuantity).sum();
+                Socks aggregatedSocks = existingSocks.get(0);
+                aggregatedSocks.setQuantity(totalQuantity);
+                return Collections.singletonList(socksRepository.save(aggregatedSocks));
+            } else {
+                return existingSocks;
+            }
         } else {
             throw new InvalidRequestException("Invalid operation: " + operation);
         }
