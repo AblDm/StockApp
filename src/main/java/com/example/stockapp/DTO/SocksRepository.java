@@ -2,6 +2,7 @@ package com.example.stockapp.DTO;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 public interface SocksRepository extends JpaRepository<Socks, Long> {
     List<Socks> findByColorAndCottonPart(String color, int cottonPart);
 
-    List<Socks> sumQuantityByColorAndCottonPartGreaterThan(String color, int cottonPart);
+    @Query("SELECT SUM(s.quantity) FROM Socks s WHERE s.color = :color AND s.cottonPart > :cottonPart")
+    Integer sumQuantityByColorAndCottonPartGreaterThan(@Param("color") String color, @Param("cottonPart") int cottonPart);
 
     List<Socks> sumQuantityByColorAndCottonPartLessThan(String color, int cottonPart);
 
