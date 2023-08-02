@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class SocksServiceImpl implements SocksService {
 
@@ -36,24 +39,35 @@ public class SocksServiceImpl implements SocksService {
         int cottonPart = request.getCottonPart();
         int quantity = request.getQuantity();
 
-        Socks socks = socksRepository.findByColorAndCottonPart(color, cottonPart);
-        if (socks == null || socks.getQuantity() < quantity) {
+        List<Socks> socksList = socksRepository.findByColorAndCottonPart(color, cottonPart);
+
+        int totalAvailableQuantity = socksList.stream().mapToInt(Socks::getQuantity).sum();
+
+        if (totalAvailableQuantity < quantity) {
             throw new InsufficientQuantityException("Insufficient socks quantity for outcome");
         }
 
-        socks.setQuantity(socks.getQuantity() - quantity);
-        socksRepository.save(socks);
+        for (Socks socks : socksList) {
+            int socksToDeduct = Math.min(socks.getQuantity(), quantity);
+            socks.setQuantity(socks.getQuantity() - socksToDeduct);
+            quantity -= socksToDeduct;
+            if (quantity == 0) {
+                break;
+            }
+        }
+
+        socksRepository.saveAll(socksList);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int getTotalSocks(String color, String operation, int cottonPart) {
+    public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         if ("moreThan".equals(operation)) {
-            return socksRepository.countByColorAndCottonPartGreaterThan(color, cottonPart);
+            return socksRepository.findByColorAndCottonPartGreaterThan(color, cottonPart);
         } else if ("lessThan".equals(operation)) {
-            return socksRepository.countByColorAndCottonPartLessThan(color, cottonPart);
+            return socksRepository.findByColorAndCottonPartLessThan(color, cottonPart);
         } else if ("equal".equals(operation)) {
-            return socksRepository.countByColorAndCottonPart(color, cottonPart);
+            return socksRepository.findByColorAndCottonPart(color, cottonPart);
         } else {
             throw new InvalidRequestException("Invalid operation: " + operation);
         }

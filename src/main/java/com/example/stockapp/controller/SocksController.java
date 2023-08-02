@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/socks/")
 public class SocksController {
@@ -69,8 +71,8 @@ public class SocksController {
             @Parameter(description = "Comparison operator", required = true, schema = @Schema(allowableValues = {"moreThan", "lessThan", "equal"})) @RequestParam String operation,
             @Parameter(description = "Cotton percentage", required = true) @RequestParam int cottonPart) {
         try {
-            int totalSocks = socksService.getTotalSocks(color, operation, cottonPart);
-            return ResponseEntity.ok(String.valueOf(totalSocks));
+            List<Socks> totalSocks = socksService.getTotalSocks(color, operation, cottonPart);
+            return ResponseEntity.ok(totalSocks.toString());
         } catch (InvalidRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
