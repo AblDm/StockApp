@@ -25,6 +25,12 @@ public class Socks {
     @Column(name = "quantity")
     private int quantity;
 
+    public Socks(Long id, String color, int cottonPart, int quantity) {
+        this.id = id;
+        this.color = color;
+        this.cottonPart = cottonPart;
+        this.quantity = quantity;
+    }
 
     public Socks(String color, int cottonPart, int quantity) {
 
@@ -78,8 +84,7 @@ public class Socks {
 
     @Override
     public String toString() {
-        return "Socks{" +
-                "id=" + id +
+        return "Socks{"+
                 ", color='" + color + '\'' +
                 ", cottonPart=" + cottonPart +
                 ", quantity=" + quantity +
