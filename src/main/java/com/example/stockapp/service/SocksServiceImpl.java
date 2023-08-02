@@ -26,11 +26,23 @@ public class SocksServiceImpl implements SocksService {
     @Override
     @Transactional
     public void registerIncome(Socks request) {
-        Socks socks = new Socks();
-        socks.setColor(request.getColor());
-        socks.setCottonPart(request.getCottonPart());
-        socks.setQuantity(request.getQuantity());
-        socksRepository.save(socks);
+        String color = request.getColor();
+        int cottonPart = request.getCottonPart();
+        int quantity = request.getQuantity();
+
+        List<Socks> existingSocks = socksRepository.findByColorAndCottonPart(color, cottonPart);
+
+        if (!existingSocks.isEmpty()) {
+            Socks aggregatedSocks = existingSocks.get(0);
+            aggregatedSocks.setQuantity(aggregatedSocks.getQuantity() + quantity);
+            socksRepository.save(aggregatedSocks);
+        } else {
+            Socks newSocks = new Socks();
+            newSocks.setColor(color);
+            newSocks.setCottonPart(cottonPart);
+            newSocks.setQuantity(quantity);
+            socksRepository.save(newSocks);
+        }
     }
 
     @Override
@@ -64,9 +76,23 @@ public class SocksServiceImpl implements SocksService {
     @Transactional
     public List<Socks> getTotalSocks(String color, String operation, int cottonPart) {
         if ("moreThan".equals(operation)) {
-            return socksRepository.findByColorAndCottonPartGreaterThan(color, cottonPart);
+            int totalQuantity = socksRepository.sumQuantityByColorAndCottonPartGreaterThan(color, cottonPart);
+
+            Socks aggregatedSocks = new Socks();
+            aggregatedSocks.setColor(color);
+            aggregatedSocks.setCottonPart(cottonPart);
+            aggregatedSocks.setQuantity(totalQuantity);
+
+            return Collections.singletonList(aggregatedSocks);
         } else if ("lessThan".equals(operation)) {
-            return socksRepository.findByColorAndCottonPartLessThan(color, cottonPart);
+            int totalQuantity = socksRepository.sumQuantityByColorAndCottonPartLessThan(color, cottonPart);
+
+            Socks aggregatedSocks = new Socks();
+            aggregatedSocks.setColor(color);
+            aggregatedSocks.setCottonPart(cottonPart);
+            aggregatedSocks.setQuantity(totalQuantity);
+
+            return Collections.singletonList(aggregatedSocks);
         } else if ("equal".equals(operation)) {
             List<Socks> existingSocks = socksRepository.findByColorAndCottonPart(color, cottonPart);
 

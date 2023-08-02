@@ -11,4 +11,8 @@ public interface SocksRepository extends JpaRepository<Socks, Long> {
     List<Socks>  findByColorAndCottonPartGreaterThan(String color, int cottonPart);
     List<Socks> findByColorAndCottonPartLessThan(String color, int cottonPart);
     List<Socks> countByColorAndCottonPart(String color, int cottonPart);
+
+    int sumQuantityByColorAndCottonPartGreaterThan(String color, int cottonPart);
+
+    int sumQuantityByColorAndCottonPartLessThan(String color, int cottonPart);
 }
