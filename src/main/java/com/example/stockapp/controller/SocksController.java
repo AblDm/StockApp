@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class SocksController {
 
 
     private final SocksServiceImpl socksService;
+    private static final Logger logger = LoggerFactory.getLogger(SocksController.class);
 
     @Autowired
     public SocksController(SocksServiceImpl socksService) {
@@ -33,15 +36,19 @@ public class SocksController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<String> registerIncome(@RequestBody Socks request) {
+        logger.debug("Entering registerIncome method");
         try {
             if (request.getCottonPart() < 0 || request.getCottonPart()  > 100) {
                 return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
             }
             socksService.registerIncome(request);
+            logger.info("Income registered successfully");
             return ResponseEntity.ok("Income registered successfully");
         } catch (InvalidRequestException e) {
+            logger.error("Invalid request: {}", e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            logger.error("Internal server error: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
