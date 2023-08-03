@@ -29,13 +29,13 @@ public class SocksController {
     @PostMapping("/income")
     @Operation(summary = "Register income of socks", responses = {
             @ApiResponse(description = "Income registered successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request format"),
+            @ApiResponse(responseCode = "400", description = "Invalid request format or params"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<String> registerIncome(@RequestBody Socks request) {
         try {
             if (request.getCottonPart() < 0 || request.getCottonPart()  > 100) {
-                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range (0, 100].");
+                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
             }
             socksService.registerIncome(request);
             return ResponseEntity.ok("Income registered successfully");
@@ -49,13 +49,13 @@ public class SocksController {
     @PostMapping("/outcome")
     @Operation(summary = "Register outcome of socks", responses = {
             @ApiResponse(description = "Outcome registered successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request format"),
+            @ApiResponse(responseCode = "400", description = "Invalid request format or params"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<String> registerOutcome(@RequestBody Socks request) {
         try {
             if (request.getCottonPart() < 0 || request.getCottonPart()  > 100) {
-                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range (0, 100].");
+                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
             }
             socksService.registerOutcome(request);
             return ResponseEntity.ok("Outcome registered successfully");
@@ -69,7 +69,7 @@ public class SocksController {
     @GetMapping()
     @Operation(summary = "Get total socks count", responses = {
             @ApiResponse(description = "Total socks count"),
-            @ApiResponse(responseCode = "400", description = "Invalid request format"),
+            @ApiResponse(responseCode = "400", description = "Invalid request format or params"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<String> getTotalSocks(
