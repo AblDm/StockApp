@@ -64,13 +64,18 @@ public class SocksServiceImpl implements SocksService {
             int socksToDeductAmount = Math.min(socks.getQuantity(), quantity);
             socks.setQuantity(socks.getQuantity() - socksToDeductAmount);
             quantity -= socksToDeductAmount;
+
             if (quantity <= 0) {
+                if (socks.getQuantity() <= 0) {
+                    socksRepository.delete(socks);
+                } else {
+                    socksRepository.save(socks);
+                }
                 break;
             }
         }
-
-     socksRepository.saveAll(socksToDeduct);
     }
+
     public String formatSocksList(List<Socks> socksList) {
         StringBuilder responseBuilder = new StringBuilder();
         for (Socks socks : socksList) {
@@ -112,5 +117,8 @@ public class SocksServiceImpl implements SocksService {
     }
 
 
+    public void deleteSocks(Long id) {
+        socksRepository.deleteById(id);
+    }
 
 }
