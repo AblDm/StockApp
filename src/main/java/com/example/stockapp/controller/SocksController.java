@@ -66,7 +66,7 @@ public class SocksController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping()
     @Operation(summary = "Get total socks count", responses = {
             @ApiResponse(description = "Total socks count"),
             @ApiResponse(responseCode = "400", description = "Invalid request format"),
