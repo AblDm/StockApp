@@ -121,4 +121,9 @@ public class SocksServiceImpl implements SocksService {
         socksRepository.deleteById(id);
     }
 
+    public void validateCottonPart(int cottonPart) {
+        if (cottonPart < 0 || cottonPart > 100) {
+            throw new InvalidRequestException("Invalid value for CottonPart. It should be in the range [0, 100].");
+        }
+    }
 }

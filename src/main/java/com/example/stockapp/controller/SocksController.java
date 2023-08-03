@@ -38,9 +38,7 @@ public class SocksController {
     public ResponseEntity<String> registerIncome(@RequestBody Socks request) {
         logger.debug("Entering registerIncome method");
         try {
-            if (request.getCottonPart() < 0 || request.getCottonPart()  > 100) {
-                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
-            }
+            socksService.validateCottonPart(request.getCottonPart());
             socksService.registerIncome(request);
             logger.info("Income registered successfully");
             return ResponseEntity.ok("Income registered successfully");
@@ -61,9 +59,7 @@ public class SocksController {
     })
     public ResponseEntity<String> registerOutcome(@RequestBody Socks request) {
         try {
-            if (request.getCottonPart() < 0 || request.getCottonPart()  > 100) {
-                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
-            }
+            socksService.validateCottonPart(request.getCottonPart());
             socksService.registerOutcome(request);
             return ResponseEntity.ok("Outcome registered successfully");
         } catch (InvalidRequestException e) {
@@ -84,9 +80,7 @@ public class SocksController {
             @Parameter(description = "Comparison operator", required = true, schema = @Schema(allowableValues = {"moreThan", "lessThan", "equal"})) @RequestParam String operation,
             @Parameter(description = "Cotton percentage", required = true) @RequestParam int cottonPart) {
         try {
-            if (cottonPart < 0 || cottonPart > 100) {
-                return ResponseEntity.badRequest().body("Invalid value for CottonPart. It should be in the range [0, 100].");
-            }
+            socksService.validateCottonPart(cottonPart);
             List<Socks> totalSocks = socksService.getTotalSocks(color, operation, cottonPart);
             String formattedResponse = socksService.formatSocksList(totalSocks);
             return ResponseEntity.ok(formattedResponse);
